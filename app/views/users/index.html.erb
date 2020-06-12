@@ -1,0 +1,23 @@
+<section class="users-section">
+  <ul class="users-list">
+    <% @users.each do |user| %>
+      <li>
+        <%= gravatar_for user, size: 20 %>
+        Name: <%= user.name %>
+        <span class="profile-link">
+          <%= link_to 'See Profile',  user_path(user), class: 'profile-link' %> | 
+        </span>
+        <% if current_user != user && friends_check(user) == false && pending_request(user) == false %>
+          <%= link_to 'Send friend request', "/users/#{user.id}/send_friend", class: 'profile-link' %>
+        <% elsif pending_request(user) %>
+          <span class= 'profile-link'>Friend request pending</span> 
+          <% if !@pending_request.blank? %>
+            <span class= 'profile-link'><%= accept_friend(@pending_request) %> | <%= reject_friend(@pending_request) %></span>
+          <% end %>
+        <% elsif friends_check(user) %>
+          <span class= 'profile-link'>Friends!!!</span> <span class= 'profile-link'><%= unfriend(user) %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</section>
